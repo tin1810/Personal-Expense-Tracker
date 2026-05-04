@@ -1,6 +1,6 @@
 # Personal Expense Tracker
 
-A Flutter app to record expenses and income, browse transactions by day and month, search the ledger, and view category breakdown charts. Data is stored locally with **Hive**.
+A Flutter app to record expenses and income, browse transactions by day and month, search the ledger, and view category breakdown charts. State is handled with **Bloc** (`flutter_bloc`); structure follows **clean architecture** (domain → data → presentation). Data is stored locally with **Hive**.
 
 Screenshots live in **`docs/screenshots/`** (JPEG files below).
 
@@ -10,13 +10,21 @@ Screenshots live in **`docs/screenshots/`** (JPEG files below).
 
 | Area | Packages / patterns |
 |------|---------------------|
-| UI | Flutter (Material 3) |
-| State | `flutter_bloc` |
+| Framework | Flutter (Material 3) |
+| State management | **Bloc** (`flutter_bloc`) |
+| Architecture | **Clean architecture** — layered modules with dependency rule (UI → Blocs → domain abstractions; data implements domain) |
 | Local DB | `hive` / `hive_flutter` |
 | Charts | `fl_chart` |
 | Utilities | `intl`, `equatable` |
 
-Architecture follows a simple layered layout: **domain** (entities, repository contracts), **data** (Hive models, mappers, repository implementation), **presentation** (pages, widgets, blocs), and **core** (theme, routing helpers, shared widgets).
+**Layers**
+
+- **Domain** — entities, categories/currency/kind, `TransactionRepository` contract  
+- **Data** — Hive models & adapters, mappers, `TransactionRepository` implementation, local stores  
+- **Presentation** — pages, widgets, **Blocs** (events/states), navigation entry points  
+- **Core** — theme, routing helpers, shared widgets, formatters  
+
+Presentation talks to the repository **only through** the domain interface; storage details stay in **data**.
 
 ---
 
