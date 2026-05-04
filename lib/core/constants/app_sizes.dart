@@ -1,4 +1,4 @@
-/// Layout and sizing tokens (padding, icons, radii, typography scale).
+/// Layout and sizing 
 abstract final class AppSizes {
   AppSizes._();
 
@@ -10,13 +10,13 @@ abstract final class AppSizes {
 
   static const double iconEmptyState = 64;
 
-  /// Leading icon size on search pill ([AppSearchPillField]).
+  /// Leading icon size on search pill 
   static const double iconSearchLeading = 26;
 
   static const double radiusSm = 8;
   static const double radiusMd = 12;
 
-  /// Large horizontal pill (e.g. search field on Search tab).
+  /// Large horizontal pill 
   static const double radiusPill = 28;
 
   /// Horizontal FilterChip row height inside scrollers.
@@ -25,7 +25,7 @@ abstract final class AppSizes {
   /// Vertical gap between search header title row and pill field.
   static const double headerSearchGap = 18;
 
-  /// Upward overlap of the sheet over the blue header ([Transform.translate]).
+  /// Upward overlap of the sheet over the blue header 
   static const double sheetOverlapUp = 18;
 
   static const double screenPadding = spaceSm;
@@ -33,6 +33,6 @@ abstract final class AppSizes {
   static const double inlineProgressSize = 24;
   static const double inlineProgressStroke = 2;
 
-  /// Minimum tap target comfort (Material guideline ~48).
+  /// Minimum tap target comfort
   static const double minTapTarget = 48;
 }

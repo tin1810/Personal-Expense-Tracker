@@ -1,4 +1,4 @@
-/// Pure keypad buffer logic for monetary strings (single amount).
+/// Pure keypad buffer logic for monetary strings 
 abstract final class AmountInputBuffer {
   AmountInputBuffer._();
 

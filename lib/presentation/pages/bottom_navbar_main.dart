@@ -6,14 +6,14 @@ import 'package:personal_expense_tracker_app/presentation/pages/charts_page.dart
 import 'package:personal_expense_tracker_app/presentation/pages/transaction_search_page.dart';
 import 'package:personal_expense_tracker_app/presentation/pages/transactions_list_page.dart';
 
-class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+class BottomNavbarMain extends StatefulWidget {
+  const BottomNavbarMain({super.key});
 
   @override
-  State<AppShell> createState() => _AppShellState();
+  State<BottomNavbarMain> createState() => _BottomNavbarMainState();
 }
 
-class _AppShellState extends State<AppShell> {
+class _BottomNavbarMainState extends State<BottomNavbarMain> {
   int _index = 0;
 
   @override

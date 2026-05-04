@@ -14,7 +14,6 @@ import 'package:personal_expense_tracker_app/presentation/widgets/transaction_ke
 class AddTransactionPage extends StatefulWidget {
   const AddTransactionPage({super.key, this.transactionToEdit});
 
-  /// When non-null, form loads this transaction and saving updates it instead of inserting.
   final Transaction? transactionToEdit;
 
   @override

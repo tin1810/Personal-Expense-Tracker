@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_expense_tracker_app/core/constants/app_sizes.dart';
 import 'package:personal_expense_tracker_app/core/formatters/money_display.dart';
+import 'package:personal_expense_tracker_app/core/router/app_navigator.dart';
 import 'package:personal_expense_tracker_app/core/widgets/reusable_widgets.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_colors.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_text_styles.dart';
@@ -12,7 +13,6 @@ import 'package:personal_expense_tracker_app/domain/entities/transaction_categor
 import 'package:personal_expense_tracker_app/domain/entities/transaction_kind.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_bloc.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_state.dart';
-import 'package:personal_expense_tracker_app/presentation/pages/transaction_detail_page.dart';
 
 class _DaySection {
   _DaySection({required this.date, required this.transactions});
@@ -489,11 +489,7 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onTap: () => Navigator.of(ctx).push<void>(
-                        MaterialPageRoute<void>(
-                          builder: (_) => TransactionDetailPage(transaction: t),
-                        ),
-                      ),
+                  onTap: () => AppNavigator.pushTransactionDetail(ctx, t),
                 );
               },
             ),

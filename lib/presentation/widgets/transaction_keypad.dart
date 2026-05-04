@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/add_transaction/add_transaction_event.dart';
 
-/// Reference-style custom keypad for a single currency amount (Bloc-driven).
+/// Reference-style custom keypad for a single currency amount 
 class TransactionKeypad extends StatelessWidget {
   const TransactionKeypad({required this.onOk, super.key});
 

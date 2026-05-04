@@ -6,7 +6,7 @@ import 'package:personal_expense_tracker_app/data/local/transaction_hive_setup.d
 import 'package:personal_expense_tracker_app/domain/repositories/transaction_repository.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/add_transaction/add_transaction_bloc.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_bloc.dart';
-import 'package:personal_expense_tracker_app/presentation/pages/app_shell.dart';
+import 'package:personal_expense_tracker_app/presentation/pages/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,8 +48,10 @@ class PersonalExpenseTrackerApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'Personal Expense Tracker',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: AppColors.seed),
+            
             useMaterial3: true,
             snackBarTheme: const SnackBarThemeData(
               backgroundColor: AppColors.snackbarBackground,
@@ -57,7 +59,7 @@ class PersonalExpenseTrackerApp extends StatelessWidget {
               behavior: SnackBarBehavior.floating,
             ),
           ),
-          home: const AppShell(),
+          home: const SplashScreen(),
         ),
       ),
     );

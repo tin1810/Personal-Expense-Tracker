@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_expense_tracker_app/core/constants/app_sizes.dart';
 import 'package:personal_expense_tracker_app/core/formatters/money_display.dart';
+import 'package:personal_expense_tracker_app/core/router/app_routes.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_colors.dart';
 import 'package:personal_expense_tracker_app/domain/entities/transaction.dart';
 import 'package:personal_expense_tracker_app/domain/entities/transaction_category_registry.dart';
@@ -94,11 +95,10 @@ class TransactionDetailPage extends StatelessWidget {
           FilledButton(
             onPressed: () async {
               final saved = await Navigator.of(context).push<bool>(
-                PageRouteBuilder<bool>(
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      AddTransactionPage(transactionToEdit: t),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                      FadeTransition(opacity: animation, child: child),
+                AppRouteTransitions.fade<bool>(
+                  routeName: AppRoutes.addTransaction,
+                  arguments: t.id,
+                  page: AddTransactionPage(transactionToEdit: t),
                 ),
               );
               if (!context.mounted) return;

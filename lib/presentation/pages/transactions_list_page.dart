@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_expense_tracker_app/core/constants/app_sizes.dart';
 import 'package:personal_expense_tracker_app/core/formatters/money_display.dart';
+import 'package:personal_expense_tracker_app/core/router/app_navigator.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_colors.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_text_styles.dart';
 import 'package:personal_expense_tracker_app/core/widgets/reusable_widgets.dart';
@@ -12,8 +13,6 @@ import 'package:personal_expense_tracker_app/domain/entities/transaction_kind.da
 import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_bloc.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_event.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_state.dart';
-import 'package:personal_expense_tracker_app/presentation/pages/add_transaction_page.dart';
-import 'package:personal_expense_tracker_app/presentation/pages/transaction_detail_page.dart';
 
 class TransactionsListPage extends StatefulWidget {
   const TransactionsListPage({super.key});
@@ -33,13 +32,7 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
   bool _balanceVisible = true;
 
   Future<void> _openAdd() async {
-    await Navigator.of(context).push<void>(
-      PageRouteBuilder<void>(
-        pageBuilder: (context, animation, secondaryAnimation) => const AddTransactionPage(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            FadeTransition(opacity: animation, child: child),
-      ),
-    );
+    await AppNavigator.pushAddTransaction(context);
     if (!mounted) return;
     context.read<TransactionsBloc>().add(const TransactionsRefreshRequested());
   }
@@ -310,11 +303,7 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onTap: () => Navigator.of(ctx).push<void>(
-                        MaterialPageRoute<void>(
-                          builder: (_) => TransactionDetailPage(transaction: t),
-                        ),
-                      ),
+                  onTap: () => AppNavigator.pushTransactionDetail(ctx, t),
                 );
               },
             ),

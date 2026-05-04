@@ -26,7 +26,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
     await _box.delete(id);
   }
 
-  /// Aggregates totals by category key for charts (same kind filter applied by caller).
+  /// Aggregates totals by category key for charts s
   Map<String, double> sumByCategoryKey(List<Transaction> transactions) {
     final map = <String, double>{};
     for (final t in transactions) {

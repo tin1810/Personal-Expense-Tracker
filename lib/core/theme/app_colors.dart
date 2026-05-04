@@ -9,6 +9,9 @@ abstract final class AppColors {
 
   static const Color homeHeaderBlue = Color(0xFF42A5F5);
 
+  /// Animated splash screen backdrop (light blue).
+  static const Color splashBackground = Color(0xFFE1F5FE);
+
   static const Color incomeAccent = Color(0xFF40C4FF);
 
   static const List<Color> incomeChartPalette = [

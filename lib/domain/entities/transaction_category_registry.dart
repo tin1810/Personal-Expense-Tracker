@@ -1,6 +1,5 @@
 import 'package:personal_expense_tracker_app/domain/entities/transaction_kind.dart';
 
-/// One selectable expense leaf category (reference-style emoji tile).
 class ExpenseCategoryItem {
   const ExpenseCategoryItem({
     required this.categoryKey,
@@ -13,7 +12,6 @@ class ExpenseCategoryItem {
   final String categoryKey;
   final String label;
   final String emoji;
-  /// Tab id: shop, eat, traffic, play, life.
   final String groupId;
 }
 
@@ -37,7 +35,7 @@ class CategoryDisplay {
   final String label;
 }
 
-/// Static registries (domain — no Flutter imports).
+/// Static registries
 abstract final class TransactionCategoryRegistry {
   TransactionCategoryRegistry._();
 
@@ -103,7 +101,7 @@ abstract final class TransactionCategoryRegistry {
   static List<ExpenseCategoryItem> expenseCategoriesForGroup(String groupId) =>
       expenseCategories.where((e) => e.groupId == groupId).toList(growable: false);
 
-  /// Tab id (`shop`, `eat`, …) for an expense [categoryKey], or [expenseGroupIds.first] if unknown.
+  
   static String expenseGroupIdForCategoryKey(String categoryKey) {
     for (final c in expenseCategories) {
       if (c.categoryKey == categoryKey) return c.groupId;
@@ -124,7 +122,7 @@ abstract final class TransactionCategoryRegistry {
           return CategoryDisplay(emoji: c.emoji, label: c.label);
         }
       }
-      // Legacy migrated keys: expense.<oldEnumName>
+      // Legacy migrated keys
       final fallback = categoryKey.replaceFirst('expense.', '');
       return CategoryDisplay(emoji: '🧾', label: fallback);
     }

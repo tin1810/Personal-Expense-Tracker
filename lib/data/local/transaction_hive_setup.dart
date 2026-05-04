@@ -12,7 +12,7 @@ import 'package:personal_expense_tracker_app/domain/entities/transaction_kind.da
 const String _transactionsBoxName = 'transactions_v1';
 const String _legacyExpensesBoxName = 'expenses_v2';
 
-/// Initializes Hive, registers adapters, migrates legacy expense-only box, opens transactions box.
+/// Initializes Hive, registers adapters
 Future<TransactionRepositoryImpl> createHiveTransactionRepository() async {
   await Hive.initFlutter();
 
@@ -28,7 +28,6 @@ Future<TransactionRepositoryImpl> createHiveTransactionRepository() async {
   return TransactionRepositoryImpl(box: txBox);
 }
 
-/// Copies rows from [expenses_v2] into [transactions_v1] as USD expenses (`expense.<oldCategoryKey>`).
 Future<void> _migrateLegacyExpenseBoxIfNeeded(Box<TransactionHiveModel> txBox) async {
   final exists = await Hive.boxExists(_legacyExpensesBoxName);
   if (!exists) return;

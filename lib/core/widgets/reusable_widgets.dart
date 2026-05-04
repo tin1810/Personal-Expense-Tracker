@@ -6,13 +6,13 @@ import 'package:personal_expense_tracker_app/core/theme/app_text_styles.dart';
 class AppGap extends StatelessWidget {
   const AppGap.height(this.height, {super.key});
 
-  /// Predefined small gap ([AppSizes.spaceXs]).
+  /// Predefined small gap 
   const AppGap.sm({super.key}) : height = AppSizes.spaceXs;
 
-  /// Predefined medium gap ([AppSizes.spaceSm]).
+  /// Predefined medium gap
   const AppGap.md({super.key}) : height = AppSizes.spaceSm;
 
-  /// Predefined large gap ([AppSizes.spaceMd]).
+  /// Predefined large gap
   const AppGap.lg({super.key}) : height = AppSizes.spaceMd;
 
   final double height;
@@ -21,7 +21,7 @@ class AppGap extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(height: height);
 }
 
-/// Standard outlined field used on forms for consistent borders and padding.
+/// Standard outlined field 
 class AppOutlinedTextField extends StatelessWidget {
   const AppOutlinedTextField({
     required this.controller,
@@ -147,33 +147,6 @@ class AppEmptyState extends StatelessWidget {
   }
 }
 
-/// Short note that storage is local / offline-capable (offline-first UX hint).
-// class OfflineFirstBanner extends StatelessWidget {
-//   const OfflineFirstBanner({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final scheme = Theme.of(context).colorScheme;
-//     return Material(
-//       color: scheme.surfaceContainerHighest,
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: AppSizes.spaceSm, vertical: AppSizes.spaceXs),
-//         child: Row(
-//           children: [
-//             Icon(Icons.smartphone_outlined, size: 20, color: scheme.primary),
-//             const SizedBox(width: AppSizes.spaceXs),
-//             Expanded(
-//               child: Text(
-//                 'Saved on this device — works fully offline.',
-//                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 /// Summary row with total for the visible (filtered) list.
 class ExpenseSummaryCard extends StatelessWidget {
