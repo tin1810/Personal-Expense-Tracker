@@ -11,7 +11,6 @@ import 'package:personal_expense_tracker_app/domain/entities/transaction.dart';
 import 'package:personal_expense_tracker_app/domain/entities/transaction_category_registry.dart';
 import 'package:personal_expense_tracker_app/domain/entities/transaction_kind.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_bloc.dart';
-import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_event.dart';
 import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_state.dart';
 import 'package:personal_expense_tracker_app/presentation/pages/transaction_detail_page.dart';
 
