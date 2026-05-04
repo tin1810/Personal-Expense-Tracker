@@ -73,15 +73,28 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
     return warm[t.categoryKey.hashCode.abs() % warm.length];
   }
 
+  DateTime _datePickerInitialDay(TransactionsLoaded state) {
+    final picked = state.selectedCalendarDay;
+    if (picked != null) {
+      return DateTime(picked.year, picked.month, picked.day);
+    }
+    final focused = state.focusedMonth;
+    final now = DateTime.now();
+    if (now.year == focused.year && now.month == focused.month) {
+      return DateTime(now.year, now.month, now.day);
+    }
+    return DateTime(focused.year, focused.month, 1);
+  }
+
   Future<void> _pickMonth(TransactionsLoaded state) async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: state.focusedMonth,
+      initialDate: _datePickerInitialDay(state),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
     if (picked != null && mounted) {
-      context.read<TransactionsBloc>().add(TransactionsFocusedMonthChanged(picked));
+      context.read<TransactionsBloc>().add(TransactionsCalendarDaySelected(picked));
     }
   }
 
@@ -110,6 +123,9 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
     final income = state.monthIncomeTotal;
     final balance = income - expense;
     final monthFmt = DateFormat.yMMMM();
+    final dayFmt = DateFormat.yMMMMd();
+    final periodLabel =
+        state.selectedCalendarDay != null ? dayFmt.format(state.selectedCalendarDay!) : monthFmt.format(state.focusedMonth);
 
     final balanceText = !_balanceVisible
         ? '••••'
@@ -131,7 +147,7 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     child: Text(
-                      monthFmt.format(state.focusedMonth),
+                      periodLabel,
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -141,6 +157,16 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
                   ),
                 ),
               ),
+              if (state.selectedCalendarDay != null) ...[
+                const SizedBox(width: 8),
+                Tooltip(
+                  message: 'Show whole month',
+                  child: _circleHeaderBtn(
+                    icon: Icons.calendar_view_month_rounded,
+                    onTap: () => context.read<TransactionsBloc>().add(const TransactionsDayFilterCleared()),
+                  ),
+                ),
+              ],
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -213,9 +239,14 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
                   padding: const EdgeInsets.all(AppSizes.spaceLg),
                   child: AppEmptyState(
                     icon: state.allTransactions.isEmpty ? Icons.receipt_long_outlined : Icons.manage_search_outlined,
-                    title: state.allTransactions.isEmpty ? 'No transactions yet' : 'No transactions this month',
-                    subtitle:
-                        state.allTransactions.isEmpty ? 'Tap + to add expense or income.' : 'Try another month.',
+                    title: state.allTransactions.isEmpty
+                        ? 'No transactions yet'
+                        : (state.selectedCalendarDay != null ? 'No transactions on this day' : 'No transactions this month'),
+                    subtitle: state.allTransactions.isEmpty
+                        ? 'Tap + to add expense or income.'
+                        : (state.selectedCalendarDay != null
+                            ? 'Try another date or open the month view.'
+                            : 'Try another month.'),
                   ),
                 ),
               ),

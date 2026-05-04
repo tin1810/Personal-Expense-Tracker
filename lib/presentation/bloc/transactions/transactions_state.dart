@@ -21,12 +21,16 @@ final class TransactionsLoaded extends TransactionsState {
   const TransactionsLoaded({
     required this.allTransactions,
     required this.focusedMonth,
+    this.selectedCalendarDay,
   });
 
   final List<Transaction> allTransactions;
 
-  /// Year/month for the home list and header totals (day ignored).
+  /// Year/month for the home list header and month navigation (day ignored).
   final DateTime focusedMonth;
+
+  /// When set, list and header totals are restricted to this calendar date (must match [focusedMonth] year/month).
+  final DateTime? selectedCalendarDay;
 
   List<Transaction> get transactionsInFocusedMonth {
     final y = focusedMonth.year;
@@ -34,17 +38,28 @@ final class TransactionsLoaded extends TransactionsState {
     return allTransactions.where((t) => t.date.year == y && t.date.month == m).toList(growable: false);
   }
 
-  /// Home list: visible month only (filters live on the Search tab).
-  List<Transaction> get filteredTransactions => transactionsInFocusedMonth;
+  /// Home list: visible month, optionally a single selected day.
+  List<Transaction> get filteredTransactions {
+    final inMonth = transactionsInFocusedMonth;
+    final day = selectedCalendarDay;
+    if (day == null) return inMonth;
+    final normalized = DateTime(day.year, day.month, day.day);
+    return inMonth
+        .where((t) {
+          final td = DateTime(t.date.year, t.date.month, t.date.day);
+          return td == normalized;
+        })
+        .toList(growable: false);
+  }
 
   double get monthExpenseTotal =>
-      transactionsInFocusedMonth.where((t) => t.kind == TransactionKind.expense).fold<double>(0, (s, t) => s + t.amount);
+      filteredTransactions.where((t) => t.kind == TransactionKind.expense).fold<double>(0, (s, t) => s + t.amount);
 
   double get monthIncomeTotal =>
-      transactionsInFocusedMonth.where((t) => t.kind == TransactionKind.income).fold<double>(0, (s, t) => s + t.amount);
+      filteredTransactions.where((t) => t.kind == TransactionKind.income).fold<double>(0, (s, t) => s + t.amount);
 
   @override
-  List<Object?> get props => [allTransactions, focusedMonth];
+  List<Object?> get props => [allTransactions, focusedMonth, selectedCalendarDay];
 }
 
 final class TransactionsFailure extends TransactionsState {
