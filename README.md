@@ -133,4 +133,4 @@ flutter test test/fake_transaction_repository_test.dart
 
 ## License
 
-This project is for personal / portfolio use unless you attach another license.
+This project is for personal .
