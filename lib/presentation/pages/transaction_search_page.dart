@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_expense_tracker_app/core/constants/app_sizes.dart';
 import 'package:personal_expense_tracker_app/core/formatters/money_display.dart';
+import 'package:personal_expense_tracker_app/core/widgets/reusable_widgets.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_colors.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_text_styles.dart';
 import 'package:personal_expense_tracker_app/data/local/search_history_store.dart';
@@ -21,7 +22,6 @@ class _DaySection {
   final List<Transaction> transactions;
 }
 
-/// Bottom-nav tab: search all transactions — styled like the Home screen.
 class TransactionSearchPage extends StatefulWidget {
   const TransactionSearchPage({super.key});
 
@@ -97,21 +97,6 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
     super.dispose();
   }
 
-  Widget _circleHeaderBtn({required IconData icon, required VoidCallback onTap}) {
-    return Material(
-      color: Colors.white.withValues(alpha: 0.22),
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Icon(icon, color: Colors.white, size: 22),
-        ),
-      ),
-    );
-  }
-
   Color _avatarBackground(Transaction t) {
     if (t.kind == TransactionKind.income) {
       return AppColors.incomeAccent.withValues(alpha: 0.38);
@@ -132,7 +117,7 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
           deleteIconColor: scheme.onSurfaceVariant,
           labelStyle: Theme.of(context).textTheme.labelLarge,
           secondaryLabelStyle: Theme.of(context).textTheme.labelLarge,
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.spaceXxs),
         ),
       ),
       child: child,
@@ -161,8 +146,8 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
         padding: const EdgeInsets.only(top: AppSizes.spaceXs),
         child: Row(
           children: [
-            Icon(Icons.category_outlined, size: 18, color: Theme.of(context).colorScheme.onSurfaceVariant),
-            const SizedBox(width: 8),
+            Icon(Icons.category_outlined, size: AppSizes.spaceMd - 6, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            const SizedBox(width: AppSizes.spaceXs),
             Expanded(
               child: Text(
                 'Choose Expense or Income to filter by category.',
@@ -224,48 +209,32 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
     }
 
     return SizedBox(
-      height: 42,
+      height: AppSizes.chipBarHeight,
       child: ListView(scrollDirection: Axis.horizontal, children: chips),
     );
   }
 
   Widget _searchHeaderField() {
-    return Material(
-      elevation: 6,
-      shadowColor: Colors.black38,
-      borderRadius: BorderRadius.circular(28),
-      color: Colors.white,
-      child: TextField(
-        controller: _controller,
-        style: Theme.of(context).textTheme.bodyLarge,
-        textInputAction: TextInputAction.search,
-        decoration: InputDecoration(
-          hintText: 'Search title, notes, categories…',
-          hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.8)),
-          prefixIcon: Icon(Icons.search_rounded, color: AppColors.homeHeaderBlue, size: 26),
-          suffixIcon: _controller.text.isEmpty
-              ? null
-              : IconButton(
-                  tooltip: 'Clear',
-                  icon: Icon(Icons.close_rounded, color: Theme.of(context).colorScheme.onSurfaceVariant),
-                  onPressed: () => _controller.clear(),
-                ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(28), borderSide: BorderSide.none),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-        ),
-        onSubmitted: (value) {
-          if (value.trim().isEmpty) return;
-          _rememberSearch(value);
-        },
-      ),
+    return AppSearchPillField(
+      controller: _controller,
+      hintText: 'Search title, notes, categories…',
+      suffixIcon: _controller.text.isEmpty
+          ? null
+          : IconButton(
+              tooltip: 'Clear',
+              icon: Icon(Icons.close_rounded, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              onPressed: () => _controller.clear(),
+            ),
+      onSubmitted: (value) {
+        if (value.trim().isEmpty) return;
+        _rememberSearch(value);
+      },
     );
   }
 
   Widget _blueHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSizes.spaceSm, 4, AppSizes.spaceSm, 22),
+      padding: const EdgeInsets.fromLTRB(AppSizes.spaceSm, AppSizes.spaceXxs, AppSizes.spaceSm, AppSizes.spaceMd - 2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -284,7 +253,7 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
                             letterSpacing: -0.5,
                           ),
                     ),
-                    const SizedBox(height: 4),
+                    const AppGap.height(AppSizes.spaceXxs),
                     Text(
                       'Find any transaction, any month',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -295,14 +264,12 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
                   ],
                 ),
               ),
-              _circleHeaderBtn(
-                icon: Icons.refresh_rounded,
-                onTap: () => context.read<TransactionsBloc>().add(const TransactionsRefreshRequested()),
-              ),
+             
             ],
           ),
-          const SizedBox(height: 18),
+          const AppGap.height(AppSizes.headerSearchGap),
           _searchHeaderField(),
+          const AppGap.height(AppSizes.spaceXs),
         ],
       ),
     );
@@ -312,8 +279,8 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
     return Row(
       children: [
         if (icon != null) ...[
-          Icon(icon, size: 20, color: AppColors.homeHeaderBlue),
-          const SizedBox(width: 8),
+          Icon(icon, size: AppSizes.spaceMd - 4, color: AppColors.homeHeaderBlue),
+          const SizedBox(width: AppSizes.spaceXs),
         ],
         Text(
           title,
@@ -331,25 +298,10 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
     if (items.isEmpty) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(AppSizes.spaceMd, AppSizes.spaceLg, AppSizes.spaceMd, AppSizes.spaceMd),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 36,
-              backgroundColor: AppColors.homeHeaderBlue.withValues(alpha: 0.15),
-              child: Icon(Icons.manage_search_rounded, size: 40, color: AppColors.homeHeaderBlue),
-            ),
-            const SizedBox(height: AppSizes.spaceMd),
-            Text(
-              'Start searching',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: AppSizes.spaceXs),
-            Text(
-              'Matches roll across title, notes, and category names. Recent searches show up here.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant, height: 1.4),
-              textAlign: TextAlign.center,
-            ),
-          ],
+        child: AppEmptyState(
+          icon: Icons.manage_search_rounded,
+          title: 'Start searching',
+          subtitle: 'Matches roll across title, notes, and category names. Recent searches show up here.',
         ),
       );
     }
@@ -372,43 +324,43 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
               ),
             ],
           ),
-          const SizedBox(height: AppSizes.spaceSm),
+          const AppGap.md(),
           Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: AppSizes.spaceSm - 6,
+            runSpacing: AppSizes.spaceSm - 6,
             children: [
               for (final term in items)
                 Material(
                   elevation: 0,
                   color: scheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppSizes.spaceMd),
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(AppSizes.spaceMd),
                     onTap: () {
                       _controller.text = term;
                       _controller.selection = TextSelection.collapsed(offset: term.length);
                       _rememberSearch(term);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 14, right: 4, top: 8, bottom: 8),
+                      padding: const EdgeInsets.only(left: AppSizes.spaceSm - 2, right: AppSizes.spaceXxs, top: AppSizes.spaceXs, bottom: AppSizes.spaceXs),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.schedule_rounded, size: 18, color: scheme.onSurfaceVariant),
-                          const SizedBox(width: 8),
+                          Icon(Icons.schedule_rounded, size: AppSizes.spaceMd - 6, color: scheme.onSurfaceVariant),
+                          const SizedBox(width: AppSizes.spaceXs),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 200),
                             child: Text(term, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodyMedium),
                           ),
                           IconButton(
-                            icon: Icon(Icons.close_rounded, size: 18, color: scheme.onSurfaceVariant),
+                            icon: Icon(Icons.close_rounded, size: AppSizes.spaceMd - 6, color: scheme.onSurfaceVariant),
                             onPressed: () {
                               store.remove(term);
                               setState(() {});
                             },
                             visualDensity: VisualDensity.compact,
                             padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                            constraints: const BoxConstraints(minWidth: AppSizes.spaceLg, minHeight: AppSizes.spaceLg),
                           ),
                         ],
                       ),
@@ -425,34 +377,22 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
   Widget _resultsList(BuildContext context, List<Transaction> allTransactions, String q) {
     final results = _computeGlobalResults(allTransactions);
     if (results.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(AppSizes.spaceLg),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 32,
-                backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                child: Icon(Icons.search_off_rounded, size: 36, color: Theme.of(context).colorScheme.onSurfaceVariant),
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Padding(
+                padding: const EdgeInsets.all(AppSizes.spaceLg),
+                child: AppEmptyState(
+                  icon: Icons.search_off_rounded,
+                  title: 'No matches',
+                  subtitle: 'Nothing found for "$q". Try another keyword or adjust filters.',
+                ),
               ),
-              const SizedBox(height: AppSizes.spaceMd),
-              Text(
-                'No matches',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: AppSizes.spaceXs),
-              Text(
-                'Nothing found for "$q". Try another keyword or adjust filters.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      height: 1.35,
-                    ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       );
     }
 
@@ -462,18 +402,18 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
       padding: const EdgeInsets.only(bottom: AppSizes.spaceLg),
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(AppSizes.spaceSm, 4, AppSizes.spaceSm, AppSizes.spaceXs),
+          padding: const EdgeInsets.fromLTRB(AppSizes.spaceSm, AppSizes.spaceXxs, AppSizes.spaceSm, AppSizes.spaceXs),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: AppColors.homeHeaderBlue.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSizes.radiusMd),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.spaceSm - 4, vertical: AppSizes.spaceSm - 6),
               child: Row(
                 children: [
-                  Icon(Icons.check_circle_outline_rounded, size: 18, color: AppColors.homeHeaderBlue),
-                  const SizedBox(width: 8),
+                  Icon(Icons.check_circle_outline_rounded, size: AppSizes.spaceMd - 6, color: AppColors.homeHeaderBlue),
+                  const SizedBox(width: AppSizes.spaceXs),
                   Text(
                     '${results.length} ${results.length == 1 ? 'result' : 'results'}',
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -489,7 +429,7 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
         for (final section in sections) ...[
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: AppSizes.spaceSm, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: AppSizes.spaceSm, vertical: AppSizes.spaceSm - 6),
             color: Colors.grey.shade100,
             child: Row(
               children: [
@@ -582,7 +522,7 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
           const SizedBox(height: AppSizes.spaceXs),
           _chipThemeWrap(
             child: SizedBox(
-              height: 42,
+              height: AppSizes.chipBarHeight,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
@@ -642,7 +582,7 @@ class _TransactionSearchPageState extends State<TransactionSearchPage> {
         ),
         Expanded(
           child: Transform.translate(
-            offset: const Offset(0, -18),
+            offset: const Offset(0, -AppSizes.sheetOverlapUp),
             child: _buildSheet(context, loaded.allTransactions),
           ),
         ),

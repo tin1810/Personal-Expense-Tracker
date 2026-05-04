@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_expense_tracker_app/core/constants/app_sizes.dart';
+import 'package:personal_expense_tracker_app/core/theme/app_colors.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_text_styles.dart';
 
 class AppGap extends StatelessWidget {
@@ -53,6 +54,59 @@ class AppOutlinedTextField extends StatelessWidget {
         hintText: hintText,
         prefixIcon: prefixIcon,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppSizes.radiusSm)),
+      ),
+    );
+  }
+}
+
+/// White elevated pill used for the Search tab header field.
+class AppSearchPillField extends StatelessWidget {
+  const AppSearchPillField({
+    required this.controller,
+    super.key,
+    this.hintText,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.textInputAction = TextInputAction.search,
+    this.onSubmitted,
+    this.elevation = 6,
+  });
+
+  final TextEditingController controller;
+  final String? hintText;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final TextInputAction textInputAction;
+  final ValueChanged<String>? onSubmitted;
+  final double elevation;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      elevation: elevation,
+      shadowColor: Colors.black38,
+      borderRadius: BorderRadius.circular(AppSizes.radiusPill),
+      color: Colors.white,
+      child: TextField(
+        controller: controller,
+        style: theme.textTheme.bodyLarge,
+        textInputAction: textInputAction,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8)),
+          prefixIcon: prefixIcon ??
+              Icon(Icons.search_rounded, color: AppColors.homeHeaderBlue, size: AppSizes.iconSearchLeading),
+          suffixIcon: suffixIcon,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppSizes.radiusPill),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.spaceXs, vertical: AppSizes.spaceSm - 2),
+        ),
+        onSubmitted: onSubmitted,
       ),
     );
   }

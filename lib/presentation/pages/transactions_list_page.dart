@@ -143,7 +143,7 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
               ),
               Expanded(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     _circleHeaderBtn(icon: Icons.chevron_left, onTap: () => _shiftMonth(state, -1)),
                     const SizedBox(width: 8),
@@ -151,30 +151,8 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
                   ],
                 ),
               ),
-              Theme(
-                data: Theme.of(context).copyWith(canvasColor: Colors.white),
-                child: PopupMenuButton<String>(
-                  padding: EdgeInsets.zero,
-                  shape: const CircleBorder(),
-                  offset: const Offset(0, 44),
-                  icon: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.22),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.more_horiz_rounded, color: Colors.white, size: 20),
-                  ),
-                  onSelected: (v) {
-                    if (v == 'r') {
-                      context.read<TransactionsBloc>().add(const TransactionsRefreshRequested());
-                    }
-                  },
-                  itemBuilder: (ctx) => const [
-                    PopupMenuItem(value: 'r', child: Text('Refresh')),
-                  ],
-                ),
-              ),
+          
+          
             ],
           ),
           const SizedBox(height: 20),
@@ -343,6 +321,8 @@ class _TransactionsListPageState extends State<TransactionsListPage> {
             ),
           ),
         ),
+     
+     
       ],
     );
   }

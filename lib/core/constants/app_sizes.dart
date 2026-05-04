@@ -2,6 +2,7 @@
 abstract final class AppSizes {
   AppSizes._();
 
+  static const double spaceXxs = 4;
   static const double spaceXs = 8;
   static const double spaceSm = 16;
   static const double spaceMd = 24;
@@ -9,8 +10,23 @@ abstract final class AppSizes {
 
   static const double iconEmptyState = 64;
 
+  /// Leading icon size on search pill ([AppSearchPillField]).
+  static const double iconSearchLeading = 26;
+
   static const double radiusSm = 8;
   static const double radiusMd = 12;
+
+  /// Large horizontal pill (e.g. search field on Search tab).
+  static const double radiusPill = 28;
+
+  /// Horizontal FilterChip row height inside scrollers.
+  static const double chipBarHeight = 42;
+
+  /// Vertical gap between search header title row and pill field.
+  static const double headerSearchGap = 18;
+
+  /// Upward overlap of the sheet over the blue header ([Transform.translate]).
+  static const double sheetOverlapUp = 18;
 
   static const double screenPadding = spaceSm;
 
