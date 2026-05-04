@@ -1,10 +1,9 @@
 import 'package:hive/hive.dart';
 import 'package:personal_expense_tracker_app/data/models/expense_hive_model.dart';
 
-/// Stable id for [ExpenseHiveModelAdapter]; do not change without migration.
 const int expenseHiveTypeId = 0;
 
-/// Manual adapter (no code generation). Bump schema carefully — Hive migrations needed per Hive docs.
+/// Manual adapter 
 class ExpenseHiveModelAdapter extends TypeAdapter<ExpenseHiveModel> {
   @override
   final int typeId = expenseHiveTypeId;

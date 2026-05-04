@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Text styles derived from [TextTheme] so typography stays consistent with [ThemeData].
 abstract final class AppTextStyles {
   AppTextStyles._();
 

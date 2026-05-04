@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 
-/// Brand and semantic colors used across the app.
-/// Prefer [ColorScheme] from [ThemeData] where possible; these fill gaps for fixed accents.
 abstract final class AppColors {
   AppColors._();
 
-  /// Passed to [ColorScheme.fromSeed]; aligns with Material `Colors.teal`.
   static const Color seed = Color(0xFF009688);
 
   static const Color snackbarBackground = Color(0xFF323232);
+
+  static const Color homeHeaderBlue = Color(0xFF42A5F5);
+
+  static const Color incomeAccent = Color(0xFF40C4FF);
+
+  static const List<Color> incomeChartPalette = [
+    Color(0xFF00B0FF),
+    Color(0xFF40C4FF),
+    Color(0xFF80D8FF),
+    Color(0xFF29B6F6),
+    Color(0xFF4FC3F7),
+    Color(0xFF26C6DA),
+    Color(0xFF18FFFF),
+    Color(0xFF00E5FF),
+  ];
 }

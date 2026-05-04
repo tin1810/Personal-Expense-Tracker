@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:personal_expense_tracker_app/core/constants/app_sizes.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_text_styles.dart';
 
-/// Vertical gap using [AppSizes] spacing tokens.
 class AppGap extends StatelessWidget {
   const AppGap.height(this.height, {super.key});
 
@@ -95,32 +94,32 @@ class AppEmptyState extends StatelessWidget {
 }
 
 /// Short note that storage is local / offline-capable (offline-first UX hint).
-class OfflineFirstBanner extends StatelessWidget {
-  const OfflineFirstBanner({super.key});
+// class OfflineFirstBanner extends StatelessWidget {
+//   const OfflineFirstBanner({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Material(
-      color: scheme.surfaceContainerHighest,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSizes.spaceSm, vertical: AppSizes.spaceXs),
-        child: Row(
-          children: [
-            Icon(Icons.smartphone_outlined, size: 20, color: scheme.primary),
-            const SizedBox(width: AppSizes.spaceXs),
-            Expanded(
-              child: Text(
-                'Saved on this device — works fully offline.',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final scheme = Theme.of(context).colorScheme;
+//     return Material(
+//       color: scheme.surfaceContainerHighest,
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: AppSizes.spaceSm, vertical: AppSizes.spaceXs),
+//         child: Row(
+//           children: [
+//             Icon(Icons.smartphone_outlined, size: 20, color: scheme.primary),
+//             const SizedBox(width: AppSizes.spaceXs),
+//             Expanded(
+//               child: Text(
+//                 'Saved on this device — works fully offline.',
+//                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 /// Summary row with total for the visible (filtered) list.
 class ExpenseSummaryCard extends StatelessWidget {
@@ -129,16 +128,27 @@ class ExpenseSummaryCard extends StatelessWidget {
     required this.visibleCount,
     required this.animationKey,
     super.key,
+    this.headerLabel = 'Total (filtered)',
+    this.countSingular = 'item',
+    this.countPlural = 'items',
+    this.icon = Icons.calculate_outlined,
+    this.iconColor,
   });
 
   final double total;
   final int visibleCount;
   final String animationKey;
+  final String headerLabel;
+  final String countSingular;
+  final String countPlural;
+  final IconData icon;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
+    final ic = iconColor ?? scheme.primary;
 
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 280),
@@ -155,19 +165,19 @@ class ExpenseSummaryCard extends StatelessWidget {
           padding: const EdgeInsets.all(AppSizes.spaceSm),
           child: Row(
             children: [
-              Icon(Icons.calculate_outlined, color: scheme.primary),
+              Icon(icon, color: ic),
               const SizedBox(width: AppSizes.spaceSm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Total (filtered)', style: theme.textTheme.labelMedium?.copyWith(color: scheme.onSurfaceVariant)),
+                    Text(headerLabel, style: theme.textTheme.labelMedium?.copyWith(color: scheme.onSurfaceVariant)),
                     Text(
                       total.toStringAsFixed(2),
                       style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '$visibleCount expense${visibleCount == 1 ? '' : 's'}',
+                      '$visibleCount ${visibleCount == 1 ? countSingular : countPlural}',
                       style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
                     ),
                   ],

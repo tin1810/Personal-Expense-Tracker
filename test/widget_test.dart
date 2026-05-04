@@ -1,15 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:personal_expense_tracker_app/data/local/search_history_store.dart';
 import 'package:personal_expense_tracker_app/main.dart';
 
-import 'fake_expense_repository.dart';
+import 'fake_transaction_repository.dart';
 
 void main() {
-  testWidgets('App shows expense tracker title', (WidgetTester tester) async {
+  testWidgets('App shell shows Home navigation', (WidgetTester tester) async {
     await tester.pumpWidget(
-      PersonalExpenseTrackerApp(expenseRepository: FakeExpenseRepository()),
+      PersonalExpenseTrackerApp(
+        transactionRepository: FakeTransactionRepository(),
+        searchHistoryStore: MemorySearchHistoryStore(),
+      ),
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Personal Expense Tracker'), findsOneWidget);
+    expect(find.text('Home'), findsWidgets);
   });
 }

@@ -1,34 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_expense_tracker_app/core/theme/app_colors.dart';
-import 'package:personal_expense_tracker_app/data/local/expense_hive_setup.dart';
-import 'package:personal_expense_tracker_app/domain/repositories/expense_repository.dart';
-import 'package:personal_expense_tracker_app/presentation/bloc/add_expense/add_expense_bloc.dart';
-import 'package:personal_expense_tracker_app/presentation/bloc/expenses/expenses_bloc.dart';
-import 'package:personal_expense_tracker_app/presentation/pages/expense_list_page.dart';
+import 'package:personal_expense_tracker_app/data/local/search_history_store.dart';
+import 'package:personal_expense_tracker_app/data/local/transaction_hive_setup.dart';
+import 'package:personal_expense_tracker_app/domain/repositories/transaction_repository.dart';
+import 'package:personal_expense_tracker_app/presentation/bloc/add_transaction/add_transaction_bloc.dart';
+import 'package:personal_expense_tracker_app/presentation/bloc/transactions/transactions_bloc.dart';
+import 'package:personal_expense_tracker_app/presentation/pages/app_shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final expenseRepository = await createHiveExpenseRepository();
-  runApp(PersonalExpenseTrackerApp(expenseRepository: expenseRepository));
+  final transactionRepository = await createHiveTransactionRepository();
+  final searchHistoryStore = await HiveSearchHistoryStore.open();
+  runApp(
+    PersonalExpenseTrackerApp(
+      transactionRepository: transactionRepository,
+      searchHistoryStore: searchHistoryStore,
+    ),
+  );
 }
 
 class PersonalExpenseTrackerApp extends StatelessWidget {
-  const PersonalExpenseTrackerApp({required this.expenseRepository, super.key});
+  const PersonalExpenseTrackerApp({
+    required this.transactionRepository,
+    required this.searchHistoryStore,
+    super.key,
+  });
 
-  final ExpenseRepository expenseRepository;
+  final TransactionRepository transactionRepository;
+  final SearchHistoryStore searchHistoryStore;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<ExpenseRepository>(
-      create: (_) => expenseRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<TransactionRepository>.value(value: transactionRepository),
+        RepositoryProvider<SearchHistoryStore>.value(value: searchHistoryStore),
+      ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<ExpensesBloc>(
-            create: (ctx) => ExpensesBloc(repository: ctx.read<ExpenseRepository>()),
+          BlocProvider<TransactionsBloc>(
+            create: (ctx) => TransactionsBloc(repository: ctx.read<TransactionRepository>()),
           ),
-          BlocProvider<AddExpenseBloc>(
-            create: (ctx) => AddExpenseBloc(repository: ctx.read<ExpenseRepository>()),
+          BlocProvider<AddTransactionBloc>(
+            create: (ctx) => AddTransactionBloc(repository: ctx.read<TransactionRepository>()),
           ),
         ],
         child: MaterialApp(
@@ -42,7 +57,7 @@ class PersonalExpenseTrackerApp extends StatelessWidget {
               behavior: SnackBarBehavior.floating,
             ),
           ),
-          home: const ExpenseListPage(),
+          home: const AppShell(),
         ),
       ),
     );
